@@ -1,26 +1,227 @@
 @import "tailwindcss";
 
+@plugin "tailwindcss-animate";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Danger Zone Aesthetic - Dark Mode by Default */
+  --background: #000000;
+  --background-secondary: #0a0a0a;
+  --foreground: #ffffff;
+  
+  --card: #0a0a0a;
+  --card-foreground: #ffffff;
+  
+  --popover: #0a0a0a;
+  --popover-foreground: #ffffff;
+  
+  --primary: #FF3333; /* Danger Zone Red */
+  --primary-foreground: #ffffff;
+  
+  --secondary: #CC0000; /* Darker Red */
+  --secondary-foreground: #ffffff;
+  
+  --muted: #1a1a1a;
+  --muted-foreground: #a1a1a1;
+  
+  --accent: #FF3333;
+  --accent-foreground: #ffffff;
+  
+  --destructive: #FF0000;
+  --destructive-foreground: #ffffff;
+  
+  --border: #1f2937;
+  --input: #1f2937;
+  --ring: #FF3333;
+  
+  --radius: 0.3rem;
+  
+  /* Custom Vars matching Halal Leverage utilities but with Red */
+  --accent-gold: #FF3333;
+  --accent-gold-light: #CC0000;
+  --text-muted: #a1a1a1;
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-background-secondary: var(--background-secondary);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+  
+  --color-accent-gold: var(--accent-gold);
+  --color-accent-gold-light: var(--accent-gold-light);
+  --color-text-muted: var(--text-muted);
+  
+  /* Animations */
+  --animate-gradient: gradient 8s ease infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-glow: glow 2s ease-in-out infinite alternate;
+  --animate-ticker: ticker 30s linear infinite;
+  
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@keyframes gradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 20px rgba(255, 51, 51, 0.3); }
+  100% { box-shadow: 0 0 40px rgba(255, 51, 51, 0.6); }
+}
+
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Global Styles */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  cursor: default;
+}
+
+/* Custom Selection Color (Red) */
+::selection {
+  background: rgba(255, 51, 51, 0.3);
+  color: #ffffff;
+}
+
+/* White hand cursor for all clickable elements */
+a, button, [role="button"], input[type="submit"], input[type="button"], 
+label, select, summary, [tabindex]:not([tabindex="-1"]) {
+  cursor: pointer !important;
+}
+
+/* Text gradient utility */
+.text-gradient {
+  background: linear-gradient(90deg, #FF3333 0%, #CC0000 50%, #FF3333 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% auto;
+}
+
+.text-gradient-animate {
+  background: linear-gradient(90deg, #FF3333 0%, #CC0000 50%, #FF3333 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% auto;
+  animation: gradient 8s ease infinite;
+}
+
+/* Glassmorphism utility */
+.glass-card {
+  background: rgba(10, 10, 10, 0.5);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 51, 51, 0.1);
+}
+
+/* Glow effects */
+.glow-gold {
+  box-shadow: 0 0 40px rgba(255, 51, 51, 0.3);
+}
+
+.glow-gold-intense {
+  box-shadow: 0 0 60px rgba(255, 51, 51, 0.5);
+}
+
+/* Button utilities */
+.btn-primary {
+  padding: 1rem 2.5rem;
+  border: 2px solid var(--accent-gold);
+  font-weight: 500;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-primary:hover {
+  border-color: var(--accent-gold-light);
+  background: rgba(255, 51, 51, 0.1);
+  box-shadow: 0 0 20px rgba(255, 51, 51, 0.3);
+}
+
+/* Gradient background */
+.gradient-bg {
+  background: radial-gradient(
+    ellipse at top,
+    rgba(255, 51, 51, 0.08) 0%,
+    rgba(204, 0, 0, 0.04) 40%,
+    transparent 70%
+  );
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  cursor: pointer;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 51, 51, 0.3);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 51, 51, 0.5);
+}
+
+/* Autofill detection animation */
+@keyframes onAutoFillStart {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+input:-webkit-autofill {
+  animation-name: onAutoFillStart;
+  animation-duration: 0.001s;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px var(--background) inset !important;
+  -webkit-text-fill-color: var(--foreground) !important;
+  transition: background-color 5000s ease-in-out 0s;
 }
