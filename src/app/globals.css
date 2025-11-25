@@ -5,42 +5,44 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  /* Danger Zone Aesthetic - Dark Mode by Default */
-  --background: #000000;
-  --background-secondary: #0a0a0a;
-  --foreground: #ffffff;
+  /* Razer Green Theme */
+  --background: #050505;
+  --background-secondary: #0a0f0a;
+  --foreground: #e0e0e0;
   
-  --card: #0a0a0a;
-  --card-foreground: #ffffff;
+  --card: #0a0f0a;
+  --card-foreground: #e0e0e0;
   
-  --popover: #0a0a0a;
-  --popover-foreground: #ffffff;
+  --popover: #0a0f0a;
+  --popover-foreground: #e0e0e0;
   
-  --primary: #FF3333; /* Danger Zone Red */
-  --primary-foreground: #ffffff;
+  --primary: #44d62c; /* Razer Green */
+  --primary-foreground: #000000;
   
-  --secondary: #CC0000; /* Darker Red */
+  --secondary: #2b8a1a; /* Darker Razer Green */
   --secondary-foreground: #ffffff;
   
-  --muted: #1a1a1a;
-  --muted-foreground: #a1a1a1;
+  --muted: #0a1f0a;
+  --muted-foreground: #60a060;
   
-  --accent: #FF3333;
+  --accent: #1a5c10; /* Deep Green */
   --accent-foreground: #ffffff;
   
-  --destructive: #FF0000;
+  --destructive: #ff0000;
   --destructive-foreground: #ffffff;
   
-  --border: #1f2937;
-  --input: #1f2937;
-  --ring: #FF3333;
+  --border: #1a3f1a;
+  --input: #0d260d;
+  --ring: #44d62c;
   
-  --radius: 0.3rem;
+  --radius: 0rem;
   
-  /* Custom Vars matching Halal Leverage utilities but with Red */
-  --accent-gold: #FF3333;
-  --accent-gold-light: #CC0000;
-  --text-muted: #a1a1a1;
+  /* Semantic Neon Vars */
+  --neon-primary: #44d62c;   /* Razer Green */
+  --neon-secondary: #2b8a1a; /* Darker Green */
+  --neon-accent: #f0f0f0;    /* White/Silver */
+  
+  --scanline-color: rgba(68, 214, 44, 0.05);
 }
 
 @theme inline {
@@ -69,15 +71,17 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
   
-  --color-accent-gold: var(--accent-gold);
-  --color-accent-gold-light: var(--accent-gold-light);
-  --color-text-muted: var(--text-muted);
-  
+  --color-neon-primary: var(--neon-primary);
+  --color-neon-secondary: var(--neon-secondary);
+  --color-neon-accent: var(--neon-accent);
+
   /* Animations */
   --animate-gradient: gradient 8s ease infinite;
   --animate-float: float 6s ease-in-out infinite;
   --animate-glow: glow 2s ease-in-out infinite alternate;
-  --animate-ticker: ticker 30s linear infinite;
+  --animate-pulse-neon: pulse-neon 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-scanline: scanline 8s linear infinite;
+  --animate-glitch: glitch 1s linear infinite;
   
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -93,13 +97,24 @@
 }
 
 @keyframes glow {
-  0% { box-shadow: 0 0 20px rgba(255, 51, 51, 0.3); }
-  100% { box-shadow: 0 0 40px rgba(255, 51, 51, 0.6); }
+  0% { box-shadow: 0 0 5px var(--neon-primary), 0 0 10px var(--neon-primary); }
+  100% { box-shadow: 0 0 20px var(--neon-primary), 0 0 40px var(--neon-primary); }
 }
 
-@keyframes ticker {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+@keyframes pulse-neon {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes glitch {
+  2%, 64% { transform: translate(2px,0) skew(0deg); }
+  4%, 60% { transform: translate(-2px,0) skew(0deg); }
+  62% { transform: translate(0,0) skew(5deg); }
 }
 
 /* Global Styles */
@@ -107,12 +122,18 @@ body {
   background: var(--background);
   color: var(--foreground);
   cursor: default;
+  background-image: 
+    linear-gradient(rgba(0, 20, 0, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+    linear-gradient(90deg, rgba(68, 214, 44, 0.03), rgba(68, 214, 44, 0.01), rgba(68, 214, 44, 0.03));
+  background-size: 100% 2px, 3px 100%;
+  overflow-x: hidden;
+  font-family: monospace; /* Enforce mono for hacker vibe */
 }
 
-/* Custom Selection Color (Red) */
+/* Custom Selection Color */
 ::selection {
-  background: rgba(255, 51, 51, 0.3);
-  color: #ffffff;
+  background: var(--neon-primary);
+  color: #000000;
 }
 
 /* White hand cursor for all clickable elements */
@@ -123,7 +144,7 @@ label, select, summary, [tabindex]:not([tabindex="-1"]) {
 
 /* Text gradient utility */
 .text-gradient {
-  background: linear-gradient(90deg, #FF3333 0%, #CC0000 50%, #FF3333 100%);
+  background: linear-gradient(90deg, var(--neon-primary) 0%, var(--neon-secondary) 50%, var(--neon-primary) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -131,7 +152,7 @@ label, select, summary, [tabindex]:not([tabindex="-1"]) {
 }
 
 .text-gradient-animate {
-  background: linear-gradient(90deg, #FF3333 0%, #CC0000 50%, #FF3333 100%);
+  background: linear-gradient(90deg, var(--neon-primary) 0%, var(--neon-secondary) 50%, var(--neon-primary) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -141,82 +162,100 @@ label, select, summary, [tabindex]:not([tabindex="-1"]) {
 
 /* Glassmorphism utility */
 .glass-card {
-  background: rgba(10, 10, 10, 0.5);
-  backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 51, 51, 0.1);
+  background: rgba(5, 15, 5, 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(68, 214, 44, 0.2);
+  box-shadow: 0 0 15px rgba(68, 214, 44, 0.05);
 }
 
-/* Glow effects */
-.glow-gold {
-  box-shadow: 0 0 40px rgba(255, 51, 51, 0.3);
+/* Cyberpunk Border */
+.cyberpunk-border {
+  position: relative;
+  border: 1px solid var(--neon-primary);
+}
+.cyberpunk-border::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  box-shadow: 0 0 10px var(--neon-primary);
+  opacity: 0.5;
+  pointer-events: none;
 }
 
-.glow-gold-intense {
-  box-shadow: 0 0 60px rgba(255, 51, 51, 0.5);
+/* Glitch Effect */
+.glitch-text {
+  position: relative;
+  color: var(--foreground);
+}
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--background);
+}
+.glitch-text::before {
+  left: 2px;
+  text-shadow: -1px 0 var(--neon-secondary);
+  clip: rect(24px, 550px, 90px, 0);
+  animation: glitch-anim 3s infinite linear alternate-reverse;
+}
+.glitch-text::after {
+  left: -2px;
+  text-shadow: -1px 0 var(--neon-primary);
+  clip: rect(85px, 550px, 140px, 0);
+  animation: glitch-anim 2s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-anim {
+  0% { clip: rect(10px, 9999px, 30px, 0); }
+  20% { clip: rect(50px, 9999px, 60px, 0); }
+  40% { clip: rect(20px, 9999px, 80px, 0); }
+  60% { clip: rect(70px, 9999px, 90px, 0); }
+  80% { clip: rect(10px, 9999px, 40px, 0); }
+  100% { clip: rect(30px, 9999px, 50px, 0); }
 }
 
 /* Button utilities */
 .btn-primary {
   padding: 1rem 2.5rem;
-  border: 2px solid var(--accent-gold);
-  font-weight: 500;
+  border: 1px solid var(--neon-primary);
+  background: rgba(68, 214, 44, 0.05);
+  color: var(--neon-primary);
+  font-weight: 600;
   font-size: 0.875rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
 .btn-primary:hover {
-  border-color: var(--accent-gold-light);
-  background: rgba(255, 51, 51, 0.1);
-  box-shadow: 0 0 20px rgba(255, 51, 51, 0.3);
-}
-
-/* Gradient background */
-.gradient-bg {
-  background: radial-gradient(
-    ellipse at top,
-    rgba(255, 51, 51, 0.08) 0%,
-    rgba(204, 0, 0, 0.04) 40%,
-    transparent 70%
-  );
+  background: rgba(68, 214, 44, 0.15);
+  box-shadow: 0 0 20px rgba(68, 214, 44, 0.4);
+  text-shadow: 0 0 8px var(--neon-primary);
 }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  cursor: pointer;
+  width: 6px;
 }
-
 ::-webkit-scrollbar-track {
   background: var(--background);
 }
-
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 51, 51, 0.3);
-  border-radius: 4px;
-  cursor: pointer;
+  background: var(--neon-secondary);
+  border-radius: 0px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 51, 51, 0.5);
+  background: var(--neon-primary);
 }
 
-/* Autofill detection animation */
-@keyframes onAutoFillStart {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-input:-webkit-autofill {
-  animation-name: onAutoFillStart;
-  animation-duration: 0.001s;
-}
-
+/* Autofill detection */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,

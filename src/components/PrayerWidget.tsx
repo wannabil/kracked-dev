@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLanguage } from '@/app/context/LanguageContext';
 import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 
 interface PrayerTimes {
   Fajr: string;
@@ -42,7 +43,6 @@ const PrayerWidget = () => {
     };
 
     fetchPrayerTimes();
-    // Update every minute to check for next prayer
     const interval = setInterval(fetchPrayerTimes, 60000);
     return () => clearInterval(interval);
   }, []);
@@ -60,8 +60,6 @@ const PrayerWidget = () => {
         return;
       }
     }
-
-    // If all passed, next is Fajr tomorrow (simplified to just showing Fajr)
     setNextPrayer({ name: 'Fajr', time: currentTimings['Fajr'] });
   };
 
@@ -71,51 +69,60 @@ const PrayerWidget = () => {
     <div className="relative hidden sm:inline-block text-left">
       <Badge
         variant="outline"
-        className="flex items-center gap-2 py-1 px-3 cursor-pointer select-none"
+        className={cn(
+          "flex items-center gap-2 py-1 px-3 cursor-pointer select-none border-neon-purple/50 text-foreground hover:bg-neon-purple/10 transition-colors duration-300",
+          open && "bg-neon-purple/20 border-neon-purple box-shadow-[0_0_10px_var(--neon-purple)]"
+        )}
         onClick={() => timings && setOpen((prev) => !prev)}
         role="button"
         aria-haspopup="true"
         aria-expanded={open}
       >
         <span className="text-xs font-semibold opacity-70">{t('nav.prayer')}</span>
-        <span className="font-bold">
+        <span className="font-bold text-neon-purple">
           {nextPrayer.name} {nextPrayer.time}
         </span>
       </Badge>
 
       {open && timings && (
-        <div className="absolute right-0 mt-2 w-56 rounded-md border bg-background shadow-lg p-3 text-xs z-40">
-          <div className="mb-2 flex items-center justify-between">
-            <span className="font-semibold">Hari ini</span>
-            <button
-              type="button"
-              className="text-muted-foreground hover:text-foreground"
-              onClick={() => setOpen(false)}
-            >
-              ×
-            </button>
+        <>
+          <div className="fixed inset-0 z-30" onClick={() => setOpen(false)} />
+          <div className="absolute right-0 mt-2 w-64 rounded-lg border border-neon-purple/30 bg-background/90 backdrop-blur-xl shadow-[0_0_30px_rgba(189,0,255,0.2)] p-4 text-sm z-40 animate-in fade-in zoom-in-95 duration-200">
+            <div className="mb-3 flex items-center justify-between border-b border-white/10 pb-2">
+              <span className="font-semibold tracking-wider uppercase text-xs text-muted-foreground">Prayer Schedule</span>
+              <button
+                type="button"
+                className="text-muted-foreground hover:text-neon-pink transition-colors"
+                onClick={() => setOpen(false)}
+              >
+                ×
+              </button>
+            </div>
+            <div className="space-y-2">
+              {PRAYER_ORDER.map((name) => (
+                <div key={name} className="flex items-center justify-between group hover:bg-white/5 p-1 rounded transition-colors">
+                  <span className={cn(
+                    "capitalize transition-colors",
+                    name === nextPrayer.name ? "text-neon-purple font-bold" : "text-foreground/80"
+                  )}>{name}</span>
+                  <span
+                    className={cn(
+                      "font-mono",
+                      name === nextPrayer.name
+                        ? 'text-neon-purple font-bold drop-shadow-[0_0_5px_var(--neon-purple)]'
+                        : 'text-foreground/60 group-hover:text-foreground'
+                    )}
+                  >
+                    {timings[name]}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="space-y-1">
-            {PRAYER_ORDER.map((name) => (
-              <div key={name} className="flex items-center justify-between">
-                <span className="capitalize">{name}</span>
-                <span
-                  className={
-                    name === nextPrayer.name
-                      ? 'font-semibold text-primary'
-                      : 'text-foreground/80'
-                  }
-                >
-                  {timings[name]}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
+        </>
       )}
     </div>
   );
 };
 
 export default PrayerWidget;
-

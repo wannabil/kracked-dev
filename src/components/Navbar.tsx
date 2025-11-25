@@ -1,91 +1,127 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/app/context/LanguageContext';
 import LanguageToggle from './LanguageToggle';
 import PrayerWidget from './PrayerWidget';
+import { cn } from '@/lib/utils';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Menu, X } from 'lucide-react';
 import { Button } from './ui/button';
-import { Menu } from 'lucide-react';
 
 const Navbar = () => {
   const { t } = useLanguage();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+  const [isScrolled, setIsScrolled] = React.useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <motion.nav 
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
-      className="w-full border-b bg-background"
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      className={cn(
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-transparent",
+        isScrolled || isMobileMenuOpen
+          ? "bg-background/80 backdrop-blur-lg border-white/10 shadow-[0_0_20px_rgba(0,255,65,0.1)]" 
+          : "bg-transparent"
+      )}
     >
-      <div className="container flex h-16 items-center px-4 mx-auto">
-        <div className="mr-4 hidden md:flex">
-          <Link href="/" className="mr-8 flex items-center space-x-2">
-            <span className="font-bold text-lg tracking-tight">
-              Kracked Devs
-            </span>
-          </Link>
-          <nav className="flex items-center gap-6 text-sm font-medium">
-            <Link href="/" className="text-foreground/60 hover:text-foreground transition-colors">
-              {t('nav.home')}
-            </Link>
-            <Link href="/talks" className="text-foreground/60 hover:text-foreground transition-colors">
-              {t('nav.talks')}
-            </Link>
-            <Link href="/hackathon" className="text-foreground/60 hover:text-foreground transition-colors">
-              {t('nav.hackathon')}
-            </Link>
-          </nav>
-        </div>
-
-        <div className="inline-flex md:hidden mr-2">
-           <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-             <Menu className="h-5 w-5" />
-           </Button>
-        </div>
-        <Link href="/" className="md:hidden mr-auto font-bold text-lg">
-            Kracked Devs
+      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+        {/* Logo */}
+        <Link href="/" className="group relative flex items-center gap-2" onClick={() => setIsMobileMenuOpen(false)}>
+          <div className="absolute -inset-2 bg-neon-primary/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <span className="relative font-mono text-xl font-bold tracking-tighter text-foreground group-hover:text-neon-primary transition-colors duration-300">
+            &lt; Kracked Devs /&gt;
+          </span>
         </Link>
 
-        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-          <div className="w-full flex-1 md:w-auto md:flex-none">
-             {/* Search placeholder if needed */}
-          </div>
-          <div className="flex items-center gap-2">
-            <PrayerWidget />
-            <div className="h-4 w-px bg-border mx-1 hidden sm:block" />
-            <LanguageToggle />
-          </div>
+        {/* Desktop Nav */}
+        <div className="hidden md:flex items-center gap-8">
+          <NavLink href="/">{t('nav.home')}</NavLink>
+          <NavLink href="/talks">{t('nav.talks')}</NavLink>
+          <NavLink href="/hackathon">{t('nav.hackathon')}</NavLink>
+        </div>
+
+        {/* Right Side (Desktop) */}
+        <div className="hidden md:flex items-center gap-4">
+          <PrayerWidget />
+          <div className="h-6 w-px bg-white/10" />
+          <LanguageToggle />
+        </div>
+
+        {/* Mobile Menu Toggle */}
+        <div className="flex items-center gap-4 md:hidden">
+          <LanguageToggle />
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="text-foreground hover:text-neon-primary"
+          >
+            {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </Button>
         </div>
       </div>
       
+      {/* Mobile Menu Dropdown */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <motion.div 
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="md:hidden border-t overflow-hidden bg-background"
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden border-t border-white/10 bg-background/95 backdrop-blur-xl overflow-hidden"
           >
-            <div className="p-4 space-y-2">
-              <Link href="/" className="block py-2 text-sm font-medium text-foreground/80 hover:text-foreground" onClick={() => setIsMobileMenuOpen(false)}>
-                {t('nav.home')}
-              </Link>
-              <Link href="/talks" className="block py-2 text-sm font-medium text-foreground/80 hover:text-foreground" onClick={() => setIsMobileMenuOpen(false)}>
-                {t('nav.talks')}
-              </Link>
-              <Link href="/hackathon" className="block py-2 text-sm font-medium text-foreground/80 hover:text-foreground" onClick={() => setIsMobileMenuOpen(false)}>
-                {t('nav.hackathon')}
-              </Link>
+            <div className="container mx-auto px-4 py-6 space-y-4 flex flex-col">
+              <MobileNavLink href="/" onClick={() => setIsMobileMenuOpen(false)}>{t('nav.home')}</MobileNavLink>
+              <MobileNavLink href="/talks" onClick={() => setIsMobileMenuOpen(false)}>{t('nav.talks')}</MobileNavLink>
+              <MobileNavLink href="/hackathon" onClick={() => setIsMobileMenuOpen(false)}>{t('nav.hackathon')}</MobileNavLink>
+              
+              <div className="pt-4 border-t border-white/10 flex items-center justify-between">
+                 <span className="text-sm text-muted-foreground">Prayer Times</span>
+                 <PrayerWidget />
+              </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Decorative Neon Line */}
+      <div className={cn(
+        "absolute bottom-0 left-0 h-[1px] bg-gradient-to-r from-transparent via-neon-primary to-transparent transition-all duration-500",
+        (isScrolled || isMobileMenuOpen) ? "w-full opacity-50" : "w-0 opacity-0"
+      )} />
     </motion.nav>
   );
 };
+
+const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
+  <Link 
+    href={href} 
+    className="relative text-sm font-medium text-muted-foreground hover:text-neon-primary transition-colors duration-300 py-2 group"
+  >
+    {children}
+    <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-neon-primary shadow-[0_0_10px_var(--neon-primary)] group-hover:w-full transition-all duration-300" />
+  </Link>
+);
+
+const MobileNavLink = ({ href, children, onClick }: { href: string; children: React.ReactNode; onClick: () => void }) => (
+  <Link 
+    href={href} 
+    onClick={onClick}
+    className="text-lg font-medium text-foreground hover:text-neon-primary hover:pl-2 transition-all duration-300 border-l-2 border-transparent hover:border-neon-primary py-2"
+  >
+    {children}
+  </Link>
+);
 
 export default Navbar;

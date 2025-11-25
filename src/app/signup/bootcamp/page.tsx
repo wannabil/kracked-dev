@@ -6,6 +6,7 @@ import PageHero from '@/components/PageHero';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { CheckCircle, Terminal, Code } from 'lucide-react';
 
 export default function BootcampSignupPage() {
   const { t } = useLanguage();
@@ -33,7 +34,6 @@ export default function BootcampSignupPage() {
       }
     };
 
-    // Check immediately and after a short delay to catch autofill
     const timer1 = setTimeout(checkAutofill, 100);
     const timer2 = setTimeout(checkAutofill, 500);
     const timer3 = setTimeout(checkAutofill, 1000);
@@ -47,7 +47,6 @@ export default function BootcampSignupPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Mock submission
     setSubmitted(true);
   };
 
@@ -59,7 +58,6 @@ export default function BootcampSignupPage() {
   };
 
   const handleInput = (e: React.FormEvent<HTMLInputElement>) => {
-    // Handle both manual input and autofill
     const input = e.currentTarget;
     setFormData(prev => ({
       ...prev,
@@ -68,7 +66,6 @@ export default function BootcampSignupPage() {
   };
 
   const handleAnimationStart = (e: React.AnimationEvent<HTMLInputElement>) => {
-    // Browsers trigger animation when autofilling
     if (e.animationName === 'onAutoFillStart') {
       const input = e.currentTarget;
       setFormData(prev => ({
@@ -86,10 +83,16 @@ export default function BootcampSignupPage() {
           subtitle="We'll be in touch soon."
         />
         <div className="container mx-auto px-4 mt-10">
-          <Card className="max-w-md mx-auto">
-            <CardContent className="pt-6 text-center">
-              <p className="text-lg mb-4">Thank you for your interest in the Vibe Code Bootcamp!</p>
+          <Card className="max-w-md mx-auto border-neon-secondary/50 bg-black/80 shadow-[0_0_30px_rgba(0,143,17,0.1)]">
+            <CardContent className="pt-8 text-center flex flex-col items-center">
+               <div className="w-16 h-16 rounded-full bg-neon-secondary/10 flex items-center justify-center mb-6">
+                <CheckCircle className="w-8 h-8 text-neon-secondary" />
+              </div>
+              <p className="text-lg mb-4 text-white">Thank you for your interest in the Vibe Code Bootcamp!</p>
               <p className="text-muted-foreground">Our team will contact you shortly with next steps.</p>
+              <Button variant="cyberpunk" asChild className="w-full mt-6 border-neon-secondary text-neon-secondary hover:bg-neon-secondary/10">
+                <a href="/">Return to HQ</a>
+              </Button>
             </CardContent>
           </Card>
         </div>
@@ -98,236 +101,209 @@ export default function BootcampSignupPage() {
   }
 
   return (
-    <main className="min-h-screen pb-20">
+    <main className="min-h-screen pb-20 overflow-hidden">
       <PageHero 
         title={t('bootcamp.title')} 
         subtitle="Sign up for the 28-day bootcamp"
       >
-        <Badge variant="secondary" className="text-lg py-1 px-4">
+        <Badge variant="outline" className="text-lg py-2 px-6 border-neon-accent text-neon-accent shadow-[0_0_10px_rgba(240,240,240,0.3)]">
           {t('bootcamp.price')}
         </Badge>
       </PageHero>
 
-      <div className="container mx-auto px-4 mt-10">
-        <div className="max-w-2xl mx-auto">
-          <Card>
-            <CardHeader>
-              <CardTitle>28-Day Curriculum</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
+      <div className="container mx-auto px-4 mt-10 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 max-w-6xl mx-auto">
+          
+          {/* Curriculum Column */}
+          <div>
+             <div className="flex items-center gap-3 mb-6">
+               <Terminal className="w-6 h-6 text-neon-primary" />
+               <h2 className="text-2xl font-bold text-white font-mono uppercase">28-Day Protocol</h2>
+             </div>
+             
+             <div className="space-y-6">
                 {/* Week 1 */}
-                <div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <Badge variant="default" className="text-sm">Week 1</Badge>
-                    <h3 className="font-semibold text-lg">Foundation & First Projects</h3>
-                  </div>
-                  <ul className="space-y-2 ml-4">
-                    <li className="flex items-start gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
-                      <span className="text-sm"><strong>Day 1-2:</strong> Environment setup, Git basics, and your first deployment</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
-                      <span className="text-sm"><strong>Day 3-4:</strong> Build a personal portfolio site (HTML, CSS, JavaScript)</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
-                      <span className="text-sm"><strong>Day 5-7:</strong> Create a simple API with Node.js and deploy to production</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
-                      <span className="text-sm"><strong>Mentorship:</strong> 1-on-1 code review session with industry mentor</span>
-                    </li>
-                  </ul>
-                </div>
+                <Card className="bg-black/40 border-white/10 hover:border-neon-primary/30 transition-colors">
+                  <CardContent className="pt-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <Badge className="bg-neon-primary text-black font-bold hover:bg-neon-primary/80">Week 1</Badge>
+                      <h3 className="font-semibold text-lg text-white">Foundation & First Projects</h3>
+                    </div>
+                    <ul className="space-y-3 ml-2 text-sm text-muted-foreground font-mono">
+                      <li className="flex items-start gap-3">
+                        <div className="h-1.5 w-1.5 rounded-full bg-neon-primary mt-2 flex-shrink-0" />
+                        <span><strong>Day 1-2:</strong> Environment setup, Git, Deployment</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <div className="h-1.5 w-1.5 rounded-full bg-neon-primary mt-2 flex-shrink-0" />
+                        <span><strong>Day 3-4:</strong> Portfolio Site (HTML/CSS/JS)</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <div className="h-1.5 w-1.5 rounded-full bg-neon-primary mt-2 flex-shrink-0" />
+                        <span><strong>Day 5-7:</strong> Simple API with Node.js</span>
+                      </li>
+                    </ul>
+                  </CardContent>
+                </Card>
 
                 {/* Week 2 */}
-                <div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <Badge variant="default" className="text-sm">Week 2</Badge>
-                    <h3 className="font-semibold text-lg">Full-Stack Applications</h3>
-                  </div>
-                  <ul className="space-y-2 ml-4">
-                    <li className="flex items-start gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
-                      <span className="text-sm"><strong>Day 8-10:</strong> Build a task management app with React and backend API</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
-                      <span className="text-sm"><strong>Day 11-12:</strong> Database integration (PostgreSQL/MongoDB) and user authentication</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
-                      <span className="text-sm"><strong>Day 13-14:</strong> Deploy full-stack app with CI/CD pipeline</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
-                      <span className="text-sm"><strong>Mentorship:</strong> Architecture review and optimization session</span>
-                    </li>
-                  </ul>
-                </div>
+                <Card className="bg-black/40 border-white/10 hover:border-neon-secondary/30 transition-colors">
+                  <CardContent className="pt-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <Badge className="bg-neon-secondary text-white font-bold hover:bg-neon-secondary/80">Week 2</Badge>
+                      <h3 className="font-semibold text-lg text-white">Full-Stack Applications</h3>
+                    </div>
+                    <ul className="space-y-3 ml-2 text-sm text-muted-foreground font-mono">
+                      <li className="flex items-start gap-3">
+                        <div className="h-1.5 w-1.5 rounded-full bg-neon-secondary mt-2 flex-shrink-0" />
+                        <span><strong>Day 8-10:</strong> React Task App + API</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <div className="h-1.5 w-1.5 rounded-full bg-neon-secondary mt-2 flex-shrink-0" />
+                        <span><strong>Day 11-12:</strong> Database & Auth (PostgreSQL)</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <div className="h-1.5 w-1.5 rounded-full bg-neon-secondary mt-2 flex-shrink-0" />
+                        <span><strong>Day 13-14:</strong> CI/CD Pipeline Deployment</span>
+                      </li>
+                    </ul>
+                  </CardContent>
+                </Card>
 
                 {/* Week 3 */}
-                <div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <Badge variant="default" className="text-sm">Week 3</Badge>
-                    <h3 className="font-semibold text-lg">AI & Automation</h3>
-                  </div>
-                  <ul className="space-y-2 ml-4">
-                    <li className="flex items-start gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
-                      <span className="text-sm"><strong>Day 15-17:</strong> Build an AI-powered chatbot using OpenAI API</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
-                      <span className="text-sm"><strong>Day 18-19:</strong> Create automation scripts for repetitive tasks (web scraping, data processing)</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
-                      <span className="text-sm"><strong>Day 20-21:</strong> Build a workflow automation tool (Zapier/IFTTT alternative)</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
-                      <span className="text-sm"><strong>Mentorship:</strong> Business value discussion - monetizing your automations</span>
-                    </li>
-                  </ul>
-                </div>
+                <Card className="bg-black/40 border-white/10 hover:border-neon-accent/30 transition-colors">
+                  <CardContent className="pt-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <Badge className="bg-neon-accent text-black font-bold hover:bg-neon-accent/80">Week 3</Badge>
+                      <h3 className="font-semibold text-lg text-white">AI & Automation</h3>
+                    </div>
+                    <ul className="space-y-3 ml-2 text-sm text-muted-foreground font-mono">
+                      <li className="flex items-start gap-3">
+                        <div className="h-1.5 w-1.5 rounded-full bg-neon-accent mt-2 flex-shrink-0" />
+                        <span><strong>Day 15-17:</strong> AI Chatbot (OpenAI API)</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <div className="h-1.5 w-1.5 rounded-full bg-neon-accent mt-2 flex-shrink-0" />
+                        <span><strong>Day 18-19:</strong> Automation Scripts</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <div className="h-1.5 w-1.5 rounded-full bg-neon-accent mt-2 flex-shrink-0" />
+                        <span><strong>Day 20-21:</strong> Workflow Tools</span>
+                      </li>
+                    </ul>
+                  </CardContent>
+                </Card>
 
-                {/* Week 4 */}
-                <div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <Badge variant="default" className="text-sm">Week 4</Badge>
-                    <h3 className="font-semibold text-lg">Capstone & Portfolio</h3>
-                  </div>
-                  <ul className="space-y-2 ml-4">
-                    <li className="flex items-start gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
-                      <span className="text-sm"><strong>Day 22-25:</strong> Build your capstone project - solve a real problem</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
-                      <span className="text-sm"><strong>Day 26:</strong> Portfolio presentation and code review</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
-                      <span className="text-sm"><strong>Day 27:</strong> Deploy all projects and create professional portfolio site</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
-                      <span className="text-sm"><strong>Day 28:</strong> Graduation ceremony - Earn "Cracked Dev" status certificate</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
-                      <span className="text-sm"><strong>Mentorship:</strong> Career guidance and next steps session</span>
-                    </li>
-                  </ul>
-                </div>
+                 {/* Week 4 */}
+                <Card className="bg-black/40 border-white/10 hover:border-white/30 transition-colors">
+                  <CardContent className="pt-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <Badge variant="outline" className="border-white text-white font-bold">Week 4</Badge>
+                      <h3 className="font-semibold text-lg text-white">Capstone & Portfolio</h3>
+                    </div>
+                    <ul className="space-y-3 ml-2 text-sm text-muted-foreground font-mono">
+                      <li className="flex items-start gap-3">
+                        <div className="h-1.5 w-1.5 rounded-full bg-white mt-2 flex-shrink-0" />
+                        <span><strong>Day 22-28:</strong> Capstone Project & Graduation</span>
+                      </li>
+                    </ul>
+                  </CardContent>
+                </Card>
+             </div>
+          </div>
 
-                {/* Additional Benefits */}
-                <div className="pt-4 border-t">
-                  <h3 className="font-semibold mb-3">Additional Benefits</h3>
-                  <ul className="space-y-2 ml-4">
-                    <li className="flex items-start gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
-                      <span className="text-sm">Access to private Discord community with 500+ developers</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
-                      <span className="text-sm">Weekly group sessions with industry leaders</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
-                      <span className="text-sm">Lifetime access to course materials and updates</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
-                      <span className="text-sm">Job placement assistance and interview prep</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          {/* Form Column */}
+          <div>
+            <div className="sticky top-24">
+               <Card className="border-neon-primary/30 bg-black/80 backdrop-blur-xl shadow-[0_0_50px_rgba(0,255,65,0.05)]">
+                <CardHeader>
+                  <CardTitle className="text-2xl font-mono uppercase tracking-widest text-neon-primary flex items-center gap-2">
+                    <Code className="w-5 h-5" />
+                    Initiate Signup
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <form onSubmit={handleSubmit} method="POST" className="space-y-6" autoComplete="on">
+                    <div className="space-y-4">
+                      <div className="group">
+                        <label htmlFor="name" className="block text-xs font-mono text-muted-foreground mb-1 uppercase tracking-wider group-focus-within:text-neon-primary transition-colors">
+                          Full Name
+                        </label>
+                        <input
+                          ref={nameRef}
+                          type="text"
+                          id="name"
+                          name="name"
+                          value={formData.name}
+                          onChange={handleChange}
+                          onInput={handleInput}
+                          onAnimationStart={handleAnimationStart}
+                          autoComplete="name"
+                          autoCapitalize="words"
+                          required
+                          className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-sm focus:outline-none focus:border-neon-primary focus:bg-white/10 transition-all text-white font-mono placeholder:text-white/20"
+                          placeholder="ENTER NAME"
+                        />
+                      </div>
 
-          <Card className="mt-6">
-            <CardHeader>
-              <CardTitle>Registration Form</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} method="POST" className="space-y-6" autoComplete="on">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium mb-2">
-                    Full Name
-                  </label>
-                  <input
-                    ref={nameRef}
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    onInput={handleInput}
-                    onAnimationStart={handleAnimationStart}
-                    autoComplete="name"
-                    autoCapitalize="words"
-                    required
-                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="Enter your full name"
-                  />
-                </div>
+                      <div className="group">
+                        <label htmlFor="email" className="block text-xs font-mono text-muted-foreground mb-1 uppercase tracking-wider group-focus-within:text-neon-primary transition-colors">
+                          Email Address
+                        </label>
+                        <input
+                          ref={emailRef}
+                          type="email"
+                          id="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleChange}
+                          onInput={handleInput}
+                          onAnimationStart={handleAnimationStart}
+                          autoComplete="email"
+                          inputMode="email"
+                          required
+                          className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-sm focus:outline-none focus:border-neon-primary focus:bg-white/10 transition-all text-white font-mono placeholder:text-white/20"
+                          placeholder="ENTER EMAIL"
+                        />
+                      </div>
 
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium mb-2">
-                    Email Address
-                  </label>
-                  <input
-                    ref={emailRef}
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    onInput={handleInput}
-                    onAnimationStart={handleAnimationStart}
-                    autoComplete="email"
-                    inputMode="email"
-                    required
-                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="your.email@example.com"
-                  />
-                </div>
+                      <div className="group">
+                        <label htmlFor="phone" className="block text-xs font-mono text-muted-foreground mb-1 uppercase tracking-wider group-focus-within:text-neon-primary transition-colors">
+                          Phone Number
+                        </label>
+                        <input
+                          ref={phoneRef}
+                          type="tel"
+                          id="phone"
+                          name="phone"
+                          value={formData.phone}
+                          onChange={handleChange}
+                          onInput={handleInput}
+                          onAnimationStart={handleAnimationStart}
+                          autoComplete="tel"
+                          inputMode="tel"
+                          required
+                          className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-sm focus:outline-none focus:border-neon-primary focus:bg-white/10 transition-all text-white font-mono placeholder:text-white/20"
+                          placeholder="+60"
+                        />
+                      </div>
+                    </div>
 
-                <div>
-                  <label htmlFor="phone" className="block text-sm font-medium mb-2">
-                    Phone Number
-                  </label>
-                  <input
-                    ref={phoneRef}
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    onInput={handleInput}
-                    onAnimationStart={handleAnimationStart}
-                    autoComplete="tel"
-                    inputMode="tel"
-                    required
-                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="+60 12-345 6789"
-                  />
-                </div>
-
-                <Button type="submit" size="lg" className="w-full">
-                  Submit Registration
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
+                    <Button type="submit" size="lg" variant="cyberpunk" className="w-full h-12 text-lg shadow-[0_0_20px_rgba(0,255,65,0.2)] hover:shadow-[0_0_30px_rgba(0,255,65,0.4)]">
+                      Confirm Enrollment
+                    </Button>
+                    
+                    <p className="text-xs text-center text-muted-foreground mt-4 font-mono">
+                      Limited spots available for the next cohort.
+                    </p>
+                  </form>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+          
         </div>
       </div>
     </main>
   );
 }
-

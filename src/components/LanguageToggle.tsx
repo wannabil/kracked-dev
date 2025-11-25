@@ -2,30 +2,44 @@
 
 import React from 'react';
 import { useLanguage } from '@/app/context/LanguageContext';
-import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 const LanguageToggle = () => {
   const { language, setLanguage } = useLanguage();
 
   return (
-    <div className="flex gap-1">
-      <Button 
-        variant={language === 'ms' ? 'default' : 'ghost'}
-        size="sm"
+    <div className="flex items-center p-1 rounded-md bg-white/5 border border-white/10">
+      <ToggleButton 
+        isActive={language === 'ms'} 
         onClick={() => setLanguage('ms')}
       >
         MY
-      </Button>
-      <Button 
-        variant={language === 'en' ? 'default' : 'ghost'}
-        size="sm"
+      </ToggleButton>
+      <ToggleButton 
+        isActive={language === 'en'} 
         onClick={() => setLanguage('en')}
       >
         EN
-      </Button>
+      </ToggleButton>
     </div>
   );
 };
 
-export default LanguageToggle;
+const ToggleButton = ({ isActive, onClick, children }: { isActive: boolean; onClick: () => void; children: React.ReactNode }) => (
+  <button 
+    onClick={onClick}
+    className={cn(
+      "px-3 py-1 text-xs font-bold transition-all duration-300 rounded relative overflow-hidden",
+      isActive 
+        ? "text-black shadow-[0_0_10px_var(--neon-cyan)]" 
+        : "text-muted-foreground hover:text-white hover:bg-white/10"
+    )}
+  >
+    {isActive && (
+      <div className="absolute inset-0 bg-neon-cyan z-0" />
+    )}
+    <span className="relative z-10">{children}</span>
+  </button>
+);
 
+export default LanguageToggle;
